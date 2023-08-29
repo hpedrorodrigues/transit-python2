@@ -8,21 +8,33 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runtime.platform }}
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
+        runtime:
+          - python: '3.6'
+            platform: 'ubuntu-20.04'
+          - python: '3.7'
+            platform: 'ubuntu-latest'
+          - python: '3.8'
+            platform: 'ubuntu-latest'
+          - python: '3.9'
+            platform: 'ubuntu-latest'
+          - python: '3.10'
+            platform: 'ubuntu-latest'
+          - python: '3.11'
+            platform: 'ubuntu-latest'
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.runtime.python }}
 
     - name: Install dependencies
       run: |
